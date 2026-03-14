@@ -13,6 +13,7 @@ public class Heap<E> {
         this.asc = asc;
         this.n = 0;
         datos = new ArrayList<>(max);
+        this.cmp = cmp;
     }
 
 
@@ -57,12 +58,14 @@ public class Heap<E> {
         return menor;
     }
 
-    private  int revisar(int raiz, int izq, int der){
+    private int revisar(int raiz, int izq, int der){
         if(asc){
-            return getMayor(raiz,izq,der);
+            // Ascendente = Queremos el más pequeño en la raíz (Min-Heap)
+            return getMenor(raiz, izq, der);
         }
         else {
-            return getMenor(raiz,izq,der);
+            // Descendente = Queremos el más grande en la raíz (Max-Heap)
+            return getMayor(raiz, izq, der);
         }
     }
 
