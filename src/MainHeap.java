@@ -53,5 +53,16 @@ public class MainHeap {
         Ejemplo de salida esperada: [1, 2, 4, 5, 7, 8, 9, 10]
         (El 1 DEBE ser el primero y cada padre debe ser menor que sus hijos).
         */
+
+        System.out.println("Extrayendo el tope: " + maxHeap.desencolar());
+        System.out.println("Heap después de extraer: " + maxHeap.datos);
+
+
+        System.out.println("\nRecorrido enOrden: ");
+        maxHeap.inOrden();
+
+        System.out.println("\nDevolver nodos hoja: ");
+        System.out.println(maxHeap.nodosHoja());
     }
+
 }

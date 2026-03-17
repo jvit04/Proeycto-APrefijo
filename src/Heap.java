@@ -101,4 +101,47 @@ public class Heap<E> {
             this.autoAjuste(i);
         }
     }
+    
+    public E desencolar(){
+        //caso base: si este vacío el heap
+        if(n==0) return null;
+        E eliminado = datos.getFirst();
+        //caso base 2: solo hay un elemento, no hay que ajustar
+        if (n == 1) {
+            datos.removeLast();
+            n--;
+            return eliminado;
+        }
+        //eliminado normal
+        datos.set(0,datos.getLast());
+        datos.removeLast();
+        n--;
+        this.autoAjuste(0);
+        return eliminado;
+    }
+
+
+
+    public void inOrden(){
+            System.out.println(this.inOrdenLogica(0));
+    }
+    private ArrayList<E> inOrdenLogica(int i){
+        //caso base 1:  si i supera a n o es -1
+        if(i>=n || i==-1) return new ArrayList<>();
+        ArrayList<E> inOrder = new ArrayList<>();
+        inOrder.addAll(this.inOrdenLogica(this.indiceHijoIzq(i)));
+        inOrder.add(datos.get(i));
+        inOrder.addAll(this.inOrdenLogica(this.indiceHijoDer(i)));
+        return inOrder;
+    }
+
+    public ArrayList<E> nodosHoja(){
+        ArrayList<E> hojas = new ArrayList<>();
+        //Matematicamente los nodos hojas estarán desde la mitad del árbol
+        for (int i = n/2; i < n; i++) {
+            hojas.add(datos.get(i));
+        }
+        return hojas;
+    }
+
 }
