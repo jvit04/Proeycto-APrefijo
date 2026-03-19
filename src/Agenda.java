@@ -8,6 +8,7 @@ public class Agenda {
     }
     //
     public void insertar(String palabra,Contacto contacto ) {
+        if(palabra==null || palabra.isBlank()) return;
         raiz.addWord(palabra.toLowerCase(), contacto);
     }
     public void insertarContacto(Contacto contacto){
