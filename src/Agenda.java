@@ -13,4 +13,9 @@ public class Agenda<E> {
     public LinkedList<E> buscar(String palabra){
         return this.raiz.buscar(palabra);
     }
+    public void eliminar(String palabra) {
+        if (palabra != null && !palabra.isBlank()) {
+            raiz.eliminarPalabra(palabra);
+        }
+    }
 }

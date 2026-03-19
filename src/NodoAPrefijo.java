@@ -12,16 +12,17 @@ public class NodoAPrefijo<E> {
 
     //constructor con NodoAPrefijo vacio
     public NodoAPrefijo() {
-        this.hijos=new HashMap<>();
-        this.finNombre=false;
-        this.datos=new LinkedList<>();
-        this.character=null;
+        this.hijos = new HashMap<>();
+        this.finNombre = false;
+        this.datos = new LinkedList<>();
+        this.character = null;
     }
+
     public NodoAPrefijo(Character character) {
-        this.hijos=new HashMap<>();
-        this.finNombre=false;
-        this.datos=new LinkedList<>();
-        this.character=character;
+        this.hijos = new HashMap<>();
+        this.finNombre = false;
+        this.datos = new LinkedList<>();
+        this.character = character;
     }
 
     public Map<Character, NodoAPrefijo<E>> getHijos() {
@@ -57,42 +58,42 @@ public class NodoAPrefijo<E> {
     }
 
     //Metodo insertar palabra
-    public void addWord(String palabra, E dato){
+    public void addWord(String palabra, E dato) {
         //caso base: palabra vacía
-        if(palabra.isBlank()) return;
+        if (palabra.isBlank()) return;
 
         char letraActual = palabra.charAt(0);
         //caso base 2: si el hijo no existe se lo crea
-        this.hijos.putIfAbsent(letraActual,new NodoAPrefijo<>(letraActual));
+        this.hijos.putIfAbsent(letraActual, new NodoAPrefijo<>(letraActual));
         NodoAPrefijo<E> siguiente = this.hijos.get(letraActual);
         //caso base 3: si es la última letra de la palabra
-        if(palabra.length()==1){
-            siguiente.finNombre=true;
+        if (palabra.length() == 1) {
+            siguiente.finNombre = true;
             siguiente.getDatos().add(dato);
         }
         //si no es la ultima letra, sigo insertando
         else {
-            siguiente.addWord(palabra.substring(1),dato);
+            siguiente.addWord(palabra.substring(1), dato);
         }
     }
 
-    public LinkedList<E> buscar(String palabra){
+    public LinkedList<E> buscar(String palabra) {
         //caso base 1: palabra vacía
-        if(palabra.isBlank()) return null;
+        if (palabra.isBlank()) return null;
         char letraActual = palabra.charAt(0);
         NodoAPrefijo<E> hijo = this.hijos.get(letraActual);
         //caso base 2: pregunto si está la letra desde la raiz *
-        if(hijo!=null){
+        if (hijo != null) {
             //caso base 3: llego a la palabra y retorno los datos
-            if(palabra.length()==1){
-                if (hijo.finNombre){
+            if (palabra.length() == 1) {
+                if (hijo.finNombre) {
                     return hijo.datos;
                 }
-            }else {//todavía no acaba la palabra y debo seguir buscando
+            } else {//todavía no acaba la palabra y debo seguir buscando
                 return hijo.buscar(palabra.substring(1));
             }
         }
-            return null;//no hay razón de seguir buscando
+        return null;//no hay razón de seguir buscando
     }
 
     // 1. Función para navegar hasta donde termina el prefijo
@@ -133,8 +134,42 @@ public class NodoAPrefijo<E> {
             nodoHijo.recorrePrefijo(palabraArmada + letraHijo, resultados);
         }
     }
+    // Método público que inicia la eliminación
+    public void eliminarPalabra(String palabra) {
+        this.eliminarSecuencia(palabra);
+    }
+
+    private void eliminarSecuencia(String palabra){
+        //Caso base: si la palabra está vacía retorno
+        if(palabra.isBlank())return;
+        char letra = palabra.charAt(0);
+        NodoAPrefijo<E> hijo = this.getHijos().get(letra);
+        if(hijo==null) return;
+        if(this.getHijos().containsKey(letra)) {
+            //Pregunto si el hijo es el fin de la palabra
+            if (hijo.finNombre && palabra.length()==1) {
+                //si es asi, uso el método desmarcar.
+                this.desmarcar(hijo);
+            }
+            else {
+                hijo.eliminarSecuencia(palabra.substring(1));
+            }
+        }
+        //Empiezo a podar los nodos
+        this.podar(letra);
+    }
+
+    private void desmarcar(NodoAPrefijo<E> nodo){
+        nodo.finNombre=false;
+    }
+
+    private void podar(char hijo){
+        if(this.getHijos().get(hijo).finNombre || !this.getHijos().get(hijo).getHijos().isEmpty()) return;
+        this.getHijos().remove(hijo);
+    }
 
 
     }
+
 
 

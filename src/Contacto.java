@@ -1,13 +1,17 @@
 public class Contacto {
 
     private String nombre;
+    private String apellido;
+    private String apodo;
     private String telefono;
     private int frecuencia;
 
-    public Contacto(String nombre, String telefono, int freq){
+    public Contacto(String nombre, String apellido, String apodo, String telefono) {
         this.nombre = nombre;
+        this.apellido = apellido;
+        this.apodo = apodo;
         this.telefono = telefono;
-        frecuencia=freq;
+        this.frecuencia = 0;
     }
 
     public String getNombre(){
