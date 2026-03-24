@@ -3,14 +3,13 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class NodoAPrefijo<E> {
-
-    //Estructura solicitada
-    Map<Character, NodoAPrefijo<E>> hijos; //el mapa de Java
+    // Estructura solicitada
+    Map<Character, NodoAPrefijo<E>> hijos;
     boolean finNombre;
-    Character character;
-    LinkedList<E> datos; //la de Java
+    LinkedList<E> datos;
+    Character character; // Aquí está tu variable para identificar el nodo
 
-    //constructor con NodoAPrefijo vacio
+    // Constructor para la raíz (vacío)
     public NodoAPrefijo() {
         this.hijos = new HashMap<>();
         this.finNombre = false;
@@ -18,6 +17,7 @@ public class NodoAPrefijo<E> {
         this.character = null;
     }
 
+    // Constructor para los hijos (con letra)
     public NodoAPrefijo(Character character) {
         this.hijos = new HashMap<>();
         this.finNombre = false;
@@ -25,151 +25,86 @@ public class NodoAPrefijo<E> {
         this.character = character;
     }
 
-    public Map<Character, NodoAPrefijo<E>> getHijos() {
-        return hijos;
-    }
+    public void insertar(String palabra, E dato) {
+        NodoAPrefijo<E> actual = this;
+        palabra = palabra.toLowerCase();
 
-    public void setHijos(Map<Character, NodoAPrefijo<E>> hijos) {
-        this.hijos = hijos;
-    }
+        for (int i = 0; i < palabra.length(); i++) {
+            char letra = palabra.charAt(i);
 
-    public boolean isFinNombre() {
-        return finNombre;
-    }
-
-    public void setFinNombre(boolean finNombre) {
-        this.finNombre = finNombre;
-    }
-
-    public Character getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(Character character) {
-        this.character = character;
-    }
-
-    public LinkedList<E> getDatos() {
-        return datos;
-    }
-
-    public void setDatos(LinkedList<E> datos) {
-        this.datos = datos;
-    }
-
-    //Metodo insertar palabra
-    public void addWord(String palabra, E dato) {
-        //caso base: palabra vacía
-        if (palabra.isBlank()) return;
-
-        char letraActual = palabra.charAt(0);
-        //caso base 2: si el hijo no existe se lo crea
-        this.hijos.putIfAbsent(letraActual, new NodoAPrefijo<>(letraActual));
-        NodoAPrefijo<E> siguiente = this.hijos.get(letraActual);
-        //caso base 3: si es la última letra de la palabra
-        if (palabra.length() == 1) {
-            siguiente.finNombre = true;
-            siguiente.getDatos().add(dato);
-        }
-        //si no es la ultima letra, sigo insertando
-        else {
-            siguiente.addWord(palabra.substring(1), dato);
-        }
-    }
-
-    public LinkedList<E> buscar(String palabra) {
-        //caso base 1: palabra vacía
-        if (palabra.isBlank()) return null;
-        char letraActual = palabra.charAt(0);
-        NodoAPrefijo<E> hijo = this.hijos.get(letraActual);
-        //caso base 2: pregunto si está la letra desde la raiz *
-        if (hijo != null) {
-            //caso base 3: llego a la palabra y retorno los datos
-            if (palabra.length() == 1) {
-                if (hijo.finNombre) {
-                    return hijo.datos;
-                }
-            } else {//todavía no acaba la palabra y debo seguir buscando
-                return hijo.buscar(palabra.substring(1));
+            // si la letra no existe, creamos un nuevo NodoAPrefijo y le pasamos el caracter
+            if (!actual.hijos.containsKey(letra)) {
+                actual.hijos.put(letra, new NodoAPrefijo<>(letra));
             }
+            // Bajamos al hijo correspondiente
+            actual = actual.hijos.get(letra);
         }
-        return null;//no hay razón de seguir buscando
+
+        actual.finNombre = true; // marcamos fin de palabra
+        actual.datos.add(dato);  // guardamos el contacto
     }
 
-    // 1. Función para navegar hasta donde termina el prefijo
-    public LinkedList<String> findPrefix(String prefijoRestante, String prefijoCompleto) {
-        // Caso base 1: Consumido todo el prefijo.
-        if (prefijoRestante.isEmpty()) {
-            LinkedList<String> resultados = new LinkedList<>();
-            this.recorrePrefijo(prefijoCompleto, resultados);
-            return resultados;
+    // Buscar por prefijo que devuelve los datos (Ideal para la agenda)
+    public LinkedList<E> buscarPrefijo(String prefijo) {
+        LinkedList<E> resultado = new LinkedList<>();
+        if (prefijo == null || prefijo.isBlank()) return resultado;
+
+        prefijo = prefijo.toLowerCase();
+        int i = 0;
+        NodoAPrefijo<E> p = this;
+
+        // Viajamos por las letras del prefijo
+        while (i < prefijo.length()) {
+            if (p == null) return null; // Si no existe el camino
+            p = p.hijos.get(prefijo.charAt(i));
+            i++;
         }
 
-        // Caso recursivo
-        char letraActual = prefijoRestante.charAt(0);
-        NodoAPrefijo<E> hijo = this.hijos.get(letraActual);
-
-        // Caso base 2: El camino se corta antes de terminar el prefijo.
-        if (hijo == null) {
-            return new LinkedList<>(); // Retornamos lista vacía
+        // Al llegar a la última letra del prefijo, recolectamos todo
+        if (p != null) {
+            p.recorrePrefijo(resultado);
         }
-
-        // Llamada recursiva
-        return hijo.findPrefix(prefijoRestante.substring(1), prefijoCompleto);
+        return resultado;
     }
 
-    // 2. Función auxiliar recursiva para recolectar las palabras (DFS)
-    private void recorrePrefijo(String palabraArmada, LinkedList<String> resultados) {
-        // Si el nodo en el que estamos parados es el fin de una palabra, lo guardamos
+    // Método auxiliar recursivo (DFS)
+    private void recorrePrefijo(LinkedList<E> Lresultado) {
         if (this.finNombre) {
-            resultados.add(palabraArmada);
+            Lresultado.addAll(this.datos);
         }
-
-        // Iteramos por todos los hijos (ramas) que salen de este nodo
-        for (Map.Entry<Character, NodoAPrefijo<E>> entrada : this.hijos.entrySet()) {
-            char letraHijo = entrada.getKey();
-            NodoAPrefijo<E> nodoHijo = entrada.getValue();
-
-            // Llamamos a la recursión sumando la letra del hijo a la palabra que estamos armando
-            nodoHijo.recorrePrefijo(palabraArmada + letraHijo, resultados);
+        for (Map.Entry<Character, NodoAPrefijo<E>> entry : this.hijos.entrySet()) {
+            NodoAPrefijo<E> hijo = entry.getValue();
+            hijo.recorrePrefijo(Lresultado);
         }
     }
-    // Método público que inicia la eliminación
-    public void eliminarPalabra(String palabra) {
-        this.eliminarSecuencia(palabra);
-    }
 
-    private void eliminarSecuencia(String palabra){
-        //Caso base: si la palabra está vacía retorno
-        if(palabra.isBlank())return;
-        char letra = palabra.charAt(0);
-        NodoAPrefijo<E> hijo = this.getHijos().get(letra);
-        if(hijo==null) return;
-        if(this.getHijos().containsKey(letra)) {
-            //Pregunto si el hijo es el fin de la palabra
-            if (hijo.finNombre && palabra.length()==1) {
-                //si es asi, uso el método desmarcar.
-                this.desmarcar(hijo);
-            }
-            else {
-                hijo.eliminarSecuencia(palabra.substring(1));
-            }
+    // Método de eliminación
+    public void eliminar(String palabra) {
+        if (palabra != null && !palabra.isBlank()) {
+            eliminarRecursivo(this, palabra.toLowerCase(), 0);
         }
-        //Empiezo a podar los nodos
-        this.podar(letra);
     }
 
-    private void desmarcar(NodoAPrefijo<E> nodo){
-        nodo.finNombre=false;
+    private boolean eliminarRecursivo(NodoAPrefijo<E> actual, String palabra, int index) {
+        if (index == palabra.length()) {
+            if (!actual.finNombre) return false;
+
+            actual.finNombre = false;
+            actual.datos.clear();
+            return actual.hijos.isEmpty();
+        }
+
+        char letra = palabra.charAt(index);
+        NodoAPrefijo<E> nodoHijo = actual.hijos.get(letra);
+
+        if (nodoHijo == null) return false;
+
+        boolean deberiaEliminarHijo = eliminarRecursivo(nodoHijo, palabra, index + 1);
+
+        if (deberiaEliminarHijo) {
+            actual.hijos.remove(letra);
+            return !actual.finNombre && actual.hijos.isEmpty();
+        }
+        return false;
     }
-
-    private void podar(char hijo){
-        if(this.getHijos().get(hijo).finNombre || !this.getHijos().get(hijo).getHijos().isEmpty()) return;
-        this.getHijos().remove(hijo);
-    }
-
-
-    }
-
-
-
+}
