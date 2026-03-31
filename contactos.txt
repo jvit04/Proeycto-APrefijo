@@ -1,8 +1,5 @@
-Maria, Gomez, Mari, 0991111111
-Mariana, Perez, Marian, 0992222222
-Marcos, Lopez, Mark, 0984444444
-Mateo, Diaz, Teo, 0975555555
-Alberto, Suarez, Beto, 0981234567
-Martin, Torres, Tin, 0969876543
-Margarita, Silva, Marga, 0998887776
-Daniel, Romero, Dani, 0987776665
+Maria, Gomez, Mari, 0991111111, 042111111, mari.gomez@email.com
+Mariana, Perez, Marian, 0992222222, 042222222, mariana.perez@email.com
+Marcos, Lopez, Mark, 0984444444, 042333333, marcos.lopez@email.com
+Mateo, Diaz, Teo, 0975555555, 042444444, mateo.diaz@email.com
+Alberto, Suarez, Beto, 0981234567, 042555555, alberto.s@email.com
