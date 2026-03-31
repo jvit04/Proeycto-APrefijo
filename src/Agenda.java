@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -22,6 +25,19 @@ public class Agenda {
         }
 
     }
+    public void cargarDesdeArchivo(String ruta) {
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] d = linea.split(",");
+                if (d.length >= 4) {
+                    // Formato: Nombre, Apellido, Apodo, Telefono
+                    Contacto nuevo = new Contacto(d[0].trim(), d[1].trim(), d[2].trim(), d[3].trim());
+                    this.insertarContacto(nuevo);}}
+            System.out.println("✅ Archivo '" + ruta + "' cargado con éxito.");
+        } catch (IOException e) {
+            System.out.println("❌ Error al cargar archivo: " + e.getMessage());}}
+
 
     // Método principal de búsqueda que utiliza el HEAP
     public void buscarYMostrar(String prefijo) {
