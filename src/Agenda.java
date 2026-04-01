@@ -132,4 +132,34 @@ public class Agenda {
         }
         System.out.println("✅ Contacto '" + c.getNombre() + "' eliminado de la agenda.");
     }
+
+    public void mostrarEstructuraHeap() {
+        // 1. Buscamos un prefijo vacío ("") para obtener TODOS los contactos desde la raíz
+        LinkedList<Contacto> todosLosContactos = arbolContactos.buscarPrefijo("");
+
+        if (todosLosContactos == null || todosLosContactos.isEmpty()) {
+            System.out.println("📭 La agenda está vacía, no hay Heap que mostrar.");
+            return;
+        }
+
+        // 2. Filtramos duplicados (recuerda que un contacto está indexado 3 veces)
+        // OJO: Aquí NO aumentamos la frecuencia, solo los recolectamos.
+        ArrayList<Contacto> listaParaHeap = new ArrayList<>();
+        for (Contacto c : todosLosContactos) {
+            if (!listaParaHeap.contains(c)) {
+                listaParaHeap.add(c);
+            }
+        }
+
+        // 3. Construimos el Max-Heap
+        Heap<Contacto> heapFrecuencias = new Heap<>(listaParaHeap.size() + 10, false, comparador);
+        heapFrecuencias.construirHeap(listaParaHeap);
+
+        // 4. Imprimimos los resultados usando los métodos que ya tienes en tu clase Heap
+        System.out.println("📊 Estructura interna del Max-Heap (Arreglo 'datos'):");
+        System.out.println(heapFrecuencias.datos);
+
+        System.out.println("\n🌳 Estructura lógica del Heap (Recorrido InOrden):");
+        heapFrecuencias.inOrden();
+    }
 }

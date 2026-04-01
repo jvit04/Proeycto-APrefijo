@@ -1,51 +1,81 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("==================================================");
-        System.out.println("   🧪 INICIANDO PRUEBAS DEL SISTEMA APREFIJO");
-        System.out.println("==================================================\n");
-
-        // 1. Instanciamos la agenda
         Agenda miAgenda = new Agenda();
+        Scanner sc = new Scanner(System.in);
+        int opcion;
 
-        // 2. PRUEBA DE CARGA DE ARCHIVO
-        System.out.println("--- PRUEBA 1: CARGA DE ARCHIVOS ---");
-        // Asegúrate de tener el archivo contactos.txt en la raíz del proyecto
-        miAgenda.cargarDesdeArchivo("contactos.txt");
-        System.out.println();
+        System.out.println("====================================================");
+        System.out.println("      SISTEMA DE GESTIÓN DE CONTACTOS (TRIE + HEAP)");
+        System.out.println("====================================================");
 
-        // 3. PRUEBA DE INSERCIÓN MANUAL
-        System.out.println("--- PRUEBA 2: INSERCIÓN MANUAL ---");
-        Contacto c1 = new Contacto("Mariano", "Gomez", "Mari", "0991111111", "042111111", "mari@email.com");
-        Contacto c2 = new Contacto("Giovanni", "Perez", "Yoyo", "0992222222", "042222222", "mariana@email.com");
-        Contacto c3 = new Contacto("Emiliano", "Lopez", "Emi", "0984444444", "042333333", "marcos@email.com");
+        do {
+            System.out.println("\n--- MENÚ DE PRESENTACIÓN ---");
+            System.out.println("1. Cargar contactos desde archivo (.txt)");
+            System.out.println("2. Insertar contacto manualmente (Demostrar Indexación)");
+            System.out.println("3. Buscar por prefijo (Demostrar Trie + Max-Heap)");
+            System.out.println("4. Eliminar contacto (Demostrar Poda de Árbol)");
+            System.out.println("5. Ver estructura interna del Heap (InOrden)");
+            System.out.println("6. Salir");
+            System.out.print("Seleccione una opción: ");
 
-        miAgenda.insertarContacto(c1);
-        miAgenda.insertarContacto(c2);
-        miAgenda.insertarContacto(c3);
-        System.out.println("✅ Contactos manuales (Mariano, Giovanni, Emiliano) insertados con éxito.\n");
+            try {
+                opcion = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                opcion = 0;
+            }
 
-        // 4. PRUEBA DEL HEAP Y FRECUENCIAS
-        System.out.println("--- PRUEBA 3: BÚSQUEDA Y HEAP DE FRECUENCIAS ---");
-        System.out.println("Buscando 'mariana' una vez (Aumenta su frecuencia)...");
-        miAgenda.buscarYMostrar("mariana");
+            switch (opcion) {
+                case 1:
+                    System.out.println("\n[PASO 1: CARGA MASIVA]");
+                    // Aquí se explica que el sistema lee el TXT y separa los datos por comas
+                    miAgenda.cargarDesdeArchivo("contactos.txt");
+                    break;
 
-        System.out.println("\nBuscando 'mar' (Deberían salir los 3, pero Mariana primero por tener más frecuencia)...");
-        miAgenda.buscarYMostrar("mar");
-        System.out.println();
+                case 2:
+                    System.out.println("\n[PASO 2: INSERCIÓN MANUAL]");
+                    System.out.println("Insertaremos a 'Juan Perez' con apodo 'Juancho'...");
+                    Contacto nuevo = new Contacto("Juan", "Perez", "Juancho", "09999999", "0420000", "juan@mail.com");
+                    miAgenda.insertarContacto(nuevo);
+                    System.out.println("-> Explicación: El contacto se guardó 3 veces en el árbol (por nombre, apellido y apodo).");
+                    break;
 
-        // 5. PRUEBA DE ELIMINACIÓN MODULAR
-        System.out.println("--- PRUEBA 4: ELIMINACIÓN ESPECÍFICA ---");
-        System.out.println("Eliminando a 'Mariano' del sistema...");
+                case 3:
+                    System.out.println("\n[PASO 3: BÚSQUEDA INTELIGENTE]");
+                    System.out.print("Ingrese el prefijo a buscar (ej: 'mar'): ");
+                    String prefijo = sc.nextLine();
+                    // Aquí se explica que buscarYMostrar aumenta la frecuencia y usa el HEAP para ordenar
+                    miAgenda.buscarYMostrar(prefijo);
+                    System.out.println("\n-> Explicación: El árbol encontró las coincidencias y el Heap las ordenó por relevancia.");
+                    break;
 
-        // Llamamos al método de eliminación de la agenda enviando el objeto exacto
-        miAgenda.eliminarContactoEspecifico(c1);
+                case 4:
+                    System.out.println("\n[PASO 4: ELIMINACIÓN Y PODA]");
+                    System.out.println("Buscando primero a 'Maria' para obtener la referencia...");
+                    // En un escenario real buscarías el objeto, aquí simulamos con uno conocido del txt
+                    Contacto aEliminar = new Contacto("Maria", "Gomez", "Mari", "0991111111", "042111111", "mari.gomez@email.com");
+                    miAgenda.eliminarContactoEspecifico(aEliminar);
+                    System.out.println("-> Explicación: Se eliminó el objeto y se podaron las ramas del árbol que quedaron vacías.");
+                    break;
 
+                case 5:
+                    System.out.println("\n[PASO 5: ESTRUCTURA DEL HEAP]");
+                    System.out.println("Esta opción demuestra cómo se ve el Heap internamente usando el recorrido InOrden.");
+                    // Nota: Esta función requiere que tengas el método en Agenda o accedas al Heap directamente
+                    System.out.println("Recorrido técnico del árbol de prioridades actual...");
+                    miAgenda.mostrarEstructuraHeap(); // Si decides implementar un getter del heap
+                    break;
 
-        System.out.println("\nBuscando 'mar' nuevamente (Mariano ya no debería aparecer)...");
-        miAgenda.buscarYMostrar("mar");
+                case 6:
+                    System.out.println("Cerrando sistema...");
+                    break;
 
-        System.out.println("\n==================================================");
-        System.out.println("   ✅ PRUEBAS FINALIZADAS");
-        System.out.println("==================================================");
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        } while (opcion != 6);
+
+        sc.close();
     }
 }
