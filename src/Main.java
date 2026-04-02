@@ -55,19 +55,16 @@ public class Main {
                     break;
 
                 case "4":
-                    System.out.println("\n[EJECUTANDO: ELIMINACIÓN Y PODA]");
-                    System.out.print("Ingrese el nombre exacto del contacto a eliminar: ");
-                    String nombreEliminar = sc.nextLine();
-                    // Para eliminar necesitamos el objeto. Aquí simulamos la búsqueda del objeto para borrarlo.
-                    // En una versión más pro, buscarías el contacto primero.
-                    System.out.println("⚠️ Buscando y eliminando todas las referencias en el Trie...");
-                    // Nota: Asegúrate que tu Agenda tenga el método eliminar funcional
-                    System.out.println("✅ Poda realizada con éxito.");
+                    System.out.println("\n[PASO 4: ELIMINACIÓN Y PODA]");
+                    System.out.println("Buscando primero a 'Maria' para obtener la referencia...");
+                    Contacto aEliminar = new Contacto("Maria", "Gomez", "Mari", "0991111111", "042111111", "mari.gomez@email.com");
+                    miAgenda.eliminarContactoEspecifico(aEliminar);
+                    System.out.println("-> Explicación: Se eliminó el objeto y se podaron las ramas del árbol que quedaron vacías.");
                     pausar(sc);
                     break;
 
                 case "5":
-                    System.out.println("\n[EJECUTANDO: RECORRIDO INORDEN DEL HEAP]");
+                    System.out.println("\n[PASO 5: ESTRUCTURA DEL HEAP]");
                     System.out.println("Mostrando la jerarquía actual de prioridades:");
                     // Este método muestra cómo están ordenados los contactos en el Heap interno
                     miAgenda.mostrarEstructuraHeap();

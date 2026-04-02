@@ -181,7 +181,6 @@ public class Heap<E> {
     /**
      * Imprime en consola el recorrido en inorden del Heap.
      */
-    // Este es el que debes llamar desde afuera
     public void inOrden() {
         ArrayList<E> lista = this.inOrdenLogica(0);
         if (lista.isEmpty()) {
@@ -189,7 +188,6 @@ public class Heap<E> {
             return;
         }
 
-        // Imprimimos uno debajo del otro para que se vea bien en el video
         for (E elemento : lista) {
             System.out.println("   > " + elemento);
         }

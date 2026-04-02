@@ -1,7 +1,5 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -134,7 +132,7 @@ public class Agenda {
         System.out.println("✅ Contacto '" + c.getNombre() + "' eliminado de la agenda.");
     }
     /**
-     * Muestra la estructura actual del heap por frecuencias y hace un recorrido enOrden
+     * Muestra la estructura actual del heap por frecuencias
      */
     public void mostrarEstructuraHeap() {
         LinkedList<Contacto> lista = arbolContactos.obtenerTodos();
