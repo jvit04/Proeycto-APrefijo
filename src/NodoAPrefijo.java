@@ -45,6 +45,16 @@ public class NodoAPrefijo<E> {
     }
 
     /**
+     * Obtiene todos los contactos almacenados en el árbol.
+     * Útil para procesos de exportación o copias de seguridad.
+     * @return Lista con todos los elementos E del árbol.
+     */
+    public LinkedList<E> obtenerTodos() {
+        LinkedList<E> todos = new LinkedList<>();
+        recorrePrefijo(todos); // Usa el método DFS que ya tienes en tu clase
+        return todos;
+    }
+    /**
      * Inserta una palabra en el árbol, creando los nodos necesarios letra por letra.
      * Al finalizar el recorrido, marca el último nodo como fin de palabra y almacena el dato.
      *
@@ -154,7 +164,7 @@ public class NodoAPrefijo<E> {
 
         // 2. Navegación: Llamada recursiva bajando al siguiente nivel
         //Ej:
-       // ℗
+        // ℗
         //↓
         //©
         boolean deberiaPodarHijo = eliminarRecursivo(nodoHijo, palabra, index + 1, contacto);

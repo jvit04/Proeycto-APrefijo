@@ -1,9 +1,10 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 /**
  * Gestiona las operaciones principales de la agenda de contactos.
  * Utiliza un Árbol Prefijo para almacenar y buscar contactos de manera eficiente,
@@ -116,7 +117,7 @@ public class Agenda {
     /**
      * Elimina un contacto específico de la agenda en todas sus referencias.
      * Remueve el contacto buscando por su nombre, apellido y apodo.
-     * * @param c El contacto exacto que se desea eliminar.
+     * @param c El contacto exacto que se desea eliminar.
      */
     public void eliminarContactoEspecifico(Contacto c) {
         if (c == null) return;
@@ -132,34 +133,61 @@ public class Agenda {
         }
         System.out.println("✅ Contacto '" + c.getNombre() + "' eliminado de la agenda.");
     }
-
+    /**
+     * Muestra la estructura actual del heap por frecuencias y hace un recorrido enOrden
+     */
     public void mostrarEstructuraHeap() {
-        // 1. Buscamos un prefijo vacío ("") para obtener TODOS los contactos desde la raíz
-        LinkedList<Contacto> todosLosContactos = arbolContactos.buscarPrefijo("");
-
-        if (todosLosContactos == null || todosLosContactos.isEmpty()) {
-            System.out.println("📭 La agenda está vacía, no hay Heap que mostrar.");
+        LinkedList<Contacto> lista = arbolContactos.obtenerTodos();
+        if (lista.isEmpty()) {
+            System.out.println("⚠️ La agenda está vacía, no hay nada en el Heap.");
             return;
         }
 
-        // 2. Filtramos duplicados (recuerda que un contacto está indexado 3 veces)
-        // OJO: Aquí NO aumentamos la frecuencia, solo los recolectamos.
-        ArrayList<Contacto> listaParaHeap = new ArrayList<>();
-        for (Contacto c : todosLosContactos) {
-            if (!listaParaHeap.contains(c)) {
-                listaParaHeap.add(c);
+        ArrayList<Contacto> unicos = new ArrayList<>();
+        for (Contacto c : lista) {
+            if (!unicos.contains(c)) {
+                unicos.add(c);
             }
         }
 
-        // 3. Construimos el Max-Heap
-        Heap<Contacto> heapFrecuencias = new Heap<>(listaParaHeap.size() + 10, false, comparador);
-        heapFrecuencias.construirHeap(listaParaHeap);
+        Heap<Contacto> heapTemp = new Heap<>(unicos.size() + 10, false, comparador);
+        heapTemp.construirHeap(unicos);
 
-        // 4. Imprimimos los resultados usando los métodos que ya tienes en tu clase Heap
-        System.out.println("📊 Estructura interna del Max-Heap (Arreglo 'datos'):");
-        System.out.println(heapFrecuencias.datos);
+        System.out.println("\n--- ESTRUCTURA REAL DEL HEAP ---");
+        System.out.println("Arreglo en memoria: " + heapTemp.datos);
 
-        System.out.println("\n🌳 Estructura lógica del Heap (Recorrido InOrden):");
-        heapFrecuencias.inOrden();
+        System.out.println("\n--- EXTRACCIÓN DEL HEAP (De Mayor a Menor Frecuencia) ---");
+        Contacto extraido;
+        int ranking = 1;
+        while ((extraido = heapTemp.desencolar()) != null) {
+            System.out.println(ranking + ". " + extraido.getNombre() + " " + extraido.getApellido() +
+                    " -> Frecuencia: " + extraido.getFrecuencia());
+            ranking++;
+        }
+        System.out.println("---------------------------------------------------------");
+    }
+    /**
+     * Permite la exportación de archivo de contactos.
+     * @param nombreArchivo ruta del archivo a exportar.
+     */
+    public void exportarAgenda(String nombreArchivo) {
+        LinkedList<Contacto> listaNodos = arbolContactos.obtenerTodos();
+        ArrayList<Contacto> unicos = new ArrayList<>();
+        for (Contacto c : listaNodos) {
+            if (!unicos.contains(c)) {
+                unicos.add(c);
+            }
+        }
+
+        try (java.io.BufferedWriter bw = new java.io.BufferedWriter(new java.io.FileWriter(nombreArchivo))) {
+            for (Contacto c : unicos) {
+                bw.write(c.getNombre() + ", " + c.getApellido() + ", " + c.getApodo() + ", " +
+                        c.getTelefonoMovil() + ", " + c.getTelefonoConvencional() + ", " + c.getCorreoElectronico());
+                bw.newLine();
+            }
+            System.out.println("✅ Archivo guardado correctamente en: " + nombreArchivo);
+        } catch (java.io.IOException e) {
+            System.out.println("❌ Error al escribir el archivo: " + e.getMessage());
+        }
     }
 }

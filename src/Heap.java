@@ -157,21 +157,23 @@ public class Heap<E> {
      * Posteriormente, reajusta la estructura para mantener la propiedad del Heap.
      * @return El elemento extraído, o null si el Heap está vacío.
      */
-    public E desencolar(){
-        //caso base: si este vacío el heap
-        if(n==0) return null;
-        E eliminado = datos.getFirst();
-        //caso base 2: solo hay un elemento, no hay que ajustar
+    public E desencolar() {
+        if (n == 0) return null;
+
+        // get(0) es el equivalente a getFirst()
+        E eliminado = datos.get(0);
+
         if (n == 1) {
-            datos.removeLast();
+            datos.remove(0); // remove(0) elimina el único elemento
             n--;
             return eliminado;
         }
-        //eliminado normal
-        datos.set(0,datos.getLast());
-        datos.removeLast();
+
+        // datos.get(n - 1) es el equivalente a getLast()
+        datos.set(0, datos.get(n - 1));
+        datos.remove(n - 1); // Eliminamos la última posición física
         n--;
-        // Se reajusta el árbol desde la nueva raíz
+
         this.autoAjuste(0);
         return eliminado;
     }
@@ -179,24 +181,33 @@ public class Heap<E> {
     /**
      * Imprime en consola el recorrido en inorden del Heap.
      */
-    public void inOrden(){
-            System.out.println(this.inOrdenLogica(0));
+    // Este es el que debes llamar desde afuera
+    public void inOrden() {
+        ArrayList<E> lista = this.inOrdenLogica(0);
+        if (lista.isEmpty()) {
+            System.out.println("   (El Heap está vacío)");
+            return;
+        }
+
+        // Imprimimos uno debajo del otro para que se vea bien en el video
+        for (E elemento : lista) {
+            System.out.println("   > " + elemento);
+        }
     }
+
     /**
-     * Genera una lista con los elementos del Heap siguiendo un recorrido en inorden.
-     * @param i El índice inicial del recorrido (generalmente 0 para la raíz).
-     * @return ArrayList con los elementos en el orden recorrido.
+     * Metodo privado para la logica recursiva del recorrido
+     * @param i indice a recorrer
+     * @return una arreglo con el recorrido
      */
-    private ArrayList<E> inOrdenLogica(int i){
-        //caso base 1:  si i supera a n o es -1
-        if(i>=n || i==-1) return new ArrayList<>();
+    private ArrayList<E> inOrdenLogica(int i) {
+        if (i >= n || i == -1) return new ArrayList<>();
 
-        ArrayList<E> inOrder = new ArrayList<>();
-        inOrder.addAll(this.inOrdenLogica(this.indiceHijoIzq(i)));
-        inOrder.add(datos.get(i));
-        inOrder.addAll(this.inOrdenLogica(this.indiceHijoDer(i)));
-
-        return inOrder;
+        ArrayList<E> res = new ArrayList<>();
+        res.addAll(this.inOrdenLogica(2 * i + 1)); // Hijo Izquierdo
+        res.add(datos.get(i));                    // Raíz
+        res.addAll(this.inOrdenLogica(2 * i + 2)); // Hijo Derecho
+        return res;
     }
 
     /**

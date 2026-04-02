@@ -1,0 +1,6 @@
+Mariana, Perez, Marian, 0992222222, 042222222, mariana.perez@email.com
+marco, aurelio, maru, 0987654321, 0412356789, adad@asd.com
+Alberto, Suarez, Beto, 0981234567, 042555555, alberto.s@email.com
+Mateo, Diaz, Teo, 0975555555, 042444444, mateo.diaz@email.com
+Maria, Gomez, Mari, 0991111111, 042111111, mari.gomez@email.com
+Marcos, Lopez, Mark, 0984444444, 042333333, marcos.lopez@email.com
