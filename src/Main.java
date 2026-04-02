@@ -35,10 +35,34 @@ public class Main {
 
                 case 2:
                     System.out.println("\n[PASO 2: INSERCIÓN MANUAL]");
-                    System.out.println("Insertaremos a 'Juan Perez' con apodo 'Juancho'...");
-                    Contacto nuevo = new Contacto("Juan", "Perez", "Juancho", "09999999", "0420000", "juan@mail.com");
-                    miAgenda.insertarContacto(nuevo);
-                    System.out.println("-> Explicación: El contacto se guardó 3 veces en el árbol (por nombre, apellido y apodo).");
+                    System.out.println("Por favor, ingrese los datos del nuevo contacto:");
+
+                    System.out.print("Nombre: ");
+                    String nombre = sc.nextLine().trim();
+
+                    System.out.print("Apellido: ");
+                    String apellido = sc.nextLine().trim();
+
+                    System.out.print("Apodo: ");
+                    String apodo = sc.nextLine().trim();
+
+                    System.out.print("Teléfono Móvil: ");
+                    String telMovil = sc.nextLine().trim();
+
+                    System.out.print("Teléfono Convencional: ");
+                    String telConvencional = sc.nextLine().trim();
+
+                    System.out.print("Correo Electrónico: ");
+                    String correo = sc.nextLine().trim();
+
+                    // Instanciamos el contacto con los datos ingresados por el usuario
+                    Contacto nuevoContacto = new Contacto(nombre, apellido, apodo, telMovil, telConvencional, correo);
+
+                    // Insertamos el contacto en el TDA
+                    miAgenda.insertarContacto(nuevoContacto);
+
+                    System.out.println("\n✅ ¡Contacto creado y guardado exitosamente!");
+                    System.out.println("-> Explicación: El sistema acaba de guardar este contacto 3 veces en el Árbol Prefijo (indexado por su nombre, apellido y apodo) para agilizar futuras búsquedas.");
                     break;
 
                 case 3:
