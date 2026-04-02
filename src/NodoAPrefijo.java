@@ -80,7 +80,7 @@ public class NodoAPrefijo<E> {
      */
     public LinkedList<E> buscarPrefijo(String prefijo) {
         LinkedList<E> resultado = new LinkedList<>();
-        if (prefijo == null || prefijo.isBlank()) return resultado;
+        if (prefijo == null) return resultado;
 
         prefijo = prefijo.toLowerCase();
         int i = 0;
