@@ -188,4 +188,23 @@ public class Agenda {
             System.out.println("❌ Error al escribir el archivo: " + e.getMessage());
         }
     }
+
+    /**
+     * todo Ejercicio tipo examen:
+     * Escriba una función que retorne cuantas palabras únicas,
+     * sin prefijos comunes existen en un trie. Por ejemplo, en el
+     * trie anterior la función retornaría el número dos por las palabras
+     * Ingeni y Profes.
+     *
+     * @return ArrayList<> con las palabras unicas formadas
+     */
+    public int getPalabrasUnicas(){
+        int contador=0;
+        for (Character c: arbolContactos.hijos.keySet()){
+            if(arbolContactos.hijos.get(c).esUnica()){
+                contador++;
+            }
+        }
+        return contador;
+    }
 }

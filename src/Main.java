@@ -19,6 +19,8 @@ public class Main {
             System.out.println("5. Ver estructura interna del Heap (InOrden)");
             System.out.println("6. Exportación de seguridad");
             System.out.println("7. Salir");
+            System.out.println("8. Bonus: ejercicio examen, # palabras únicas");
+
             System.out.print("Seleccione una opción: ");
 
             String opcion = sc.nextLine();
@@ -82,6 +84,9 @@ public class Main {
                 case "7":
                     System.out.println("Finalizando programa. ¡Gracias por la presentación!");
                     salir = true;
+                    break;
+                case "8":
+                    System.out.println(miAgenda.getPalabrasUnicas());
                     break;
 
                 default:

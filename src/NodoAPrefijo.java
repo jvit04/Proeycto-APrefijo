@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Representa un nodo dentro de la estructura de datos Árbol Prefijo (Trie).
@@ -51,7 +49,7 @@ public class NodoAPrefijo<E> {
      */
     public LinkedList<E> obtenerTodos() {
         LinkedList<E> todos = new LinkedList<>();
-        recorrePrefijo(todos); // Usa el método DFS que ya tienes en tu clase
+        recorrePrefijo(todos);
         return todos;
     }
     /**
@@ -215,4 +213,25 @@ public class NodoAPrefijo<E> {
         }
         return false;
     }
+
+
+public boolean esUnica(){
+        //comprobar que no haya bifurcaciones
+        if(this.hijos.size()>1)return false;
+        //caso base: si es fin de palabra es true entonces
+        if(this.finNombre&& this.hijos.isEmpty()) return true;
+        //para saber si es unico, solo necesito saber si el
+    //tamaño del mapa es 1 y para usar la recursividad debo saber
+    //que no sea fin de palabra.
+        if(this.hijos.size()==1 && !this.finNombre){
+            List<Character> hijoUnico = this.hijos.keySet().stream().toList();
+            return this.hijos.get(hijoUnico.getFirst()).esUnica();
+        }
+        return false;
+        }
+
+
+
+
+
 }
